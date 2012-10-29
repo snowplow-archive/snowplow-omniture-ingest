@@ -1,3 +1,3 @@
-# Scalding version of SnowPlow-Omniture ingest
+# Scalding version of SnowPlow-Omniture-Ingest
 
 Coming soon
