@@ -23,9 +23,11 @@ You can either run the queries by pasting them directly into the Hive console, o
 	$ OMNITURE_LOGS_LOCATION=s3://{{enter bucket and folder(s) here pointing at folder in S3 containing Omniture logs}}
 	$ SNOWPLOW_DATA_LOCATION=s3://{{enter appropriate bucket and folder(s) here where SnowPlow data will be imported into}}
 	$ ./elastic-mapreduce --create --name "omniture ingest" \
-		--hive-script --arg s3://{{enter location of omniture-ingest.q}} \
+		--hive-script --arg s3://snowplow-emr-assets/hive/hiveql/omniture-ingest.q \
 		--args -d OMNITURE_LOGS_LOCATION=$OMNITURE_LOGS_LOCATION \
 		--args -d SNOWPLOW_DATA_LOCATION=$SNOWPLOW_DATA_LOCATION
+
+Note: SnowPlow hosts the `s3://snowplow-emr-assets/hive/hiveql/omniture-ingest.q` script for public usage. You may, alternatively, upload your own version of `omniture-ingest.q` to s3 and invoke it by modifying the path above to point to your copy.
 
 ## Omniture table definitions: what has and has not been mapped
 

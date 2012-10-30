@@ -389,7 +389,7 @@ SUBSTRING(date_time, 12, 8) AS tm,
 
 -- update following line with a suitable function to set txn_id (e.g. based on random number)
 NULL AS txn_id,				
-CONCAT(visid_low, visid_high) AS user_id,
+CONCAT(visid_high,'-',visid_high) AS user_id,
 ip AS ip_address, 
 visit_num as visit_id,
 
