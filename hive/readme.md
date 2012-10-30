@@ -38,28 +38,29 @@ The below table lists all of the fields in the Omniture log files, and indicates
 | `service`      | pe (page event) or ss  | Will not be included | Deprecated field                               |
 | `accept_language`| Accept language header from browser | Yes | Direct mapping: `br_lang`                        |
 | `date_time`      | Time (recorded by Omniture servers) | Yes | Mapped to `dt` and `tm`                            |
-| `visid_high`   | 1st part of user_id | Yes             | Mapped to `user_id`: `user_id` = CONCAT(`visid_high`, `visid_low`) |
-| `visid_low`    | 2nd part of user_id | Yes             | Mapped to `user_id`: `user_id` = CONCAT(`visid_high`, `visid_low`) |
-| `event_list`   | Comma separated list of numeric IDs, representing events passed in from the customer | Potential todo | Need to work out when / how this is used |
-| `homepage`     | Homepage flag     | Will not be included | Redundant (easy to deduce if homepage view from `page_url` |
+| `visid_high`   | 1st part of user_id | Yes             | Mapped to `user_id`: `user_id = CONCAT(visid_high, visid_low)` |
+| `visid_low`    | 2nd part of user_id | Yes             | Mapped to `user_id`: `user_id = CONCAT(visid_high, visid_low)` |
+| `event_list`   | Comma separated list of numeric IDs, representing events passed in from the customer | Potential todo | Need to work out when / how this is used i.e. where are the numeric IDs specified looked up? |
+| `homepage`     | Homepage flag     | Will not be included | Redundant (easy to deduce if homepage view from `page_url`) |
 | `ip`           | IP Address        | Yes                  | Direct mapping: `ip_address`                        |
-| `page_event    |                   | In progress          | Need to map fields looked up by `page_event` (normal, download, exit, custom) to `event_name` |
+| `page_event`   | Page event ID, the type of hit that is sent in the request. Lookups provided for type of event (normal, download, exit, custom)
+ | In progress          | Need to map fields looked up by `page_event` (normal, download, exit, custom) to `event_name` |
 | `page_event_var_1` | Related to the `page_event` column. URL of the download link, exit link or custom link clicked. | Will not be included | We use `click_action_type` column instead |
 | `page_type`    | Only used for error pages | Will not be included | Hard to see the value of this field         |
 | `page_url`    | URL of the page view | Yes                | Direct mapping: `page_url`                          |
 | `pagename`    | The title of the page | Yes               | Direct mapping: `page_title`                        |
-| `product_list`| The product list as passed in through the javascript | In progress | Need to work out the format of the JSON, and create multiple lines in SnowPlow that correspond to each product (`ti_sku` / `ti_name`) in the list | 
+| `product_list`| The product list as passed in through the javascript | In progress | Need to work out the format of the field (incredibly it is **not** a JSON), and create multiple lines in SnowPlow that correspond to each product (`ti_sku` / `ti_name`) in the list | 
 | `user_server` | Custom insight variable for servers | No  | Not clear if there is a generic mapping for Omniture -> SnowPlow custom variables (needs to be client specific) |
 | `channel`     | Custom insight variable for site sections (chnanels) |  No  | Not clear if there is a generic mapping for Omniture -> SnowPlow custom variables (needs to be client specific) |
-| `prop1` -> `prop50` | Custom insight variables (50 in total) | No  | Not clear if there is a generic mapping for Omniture -> SnowPlow custom variables (needs to be client specific) |
-| `purchaseid`  | Unique dientifier for purchase | Yes     | Direct mapping: `tr_orderid` **and** `ti_orderid` |
+| `prop1` -> `prop50` | Custom insight variables (50 in total) | No  | Not clear if there is a generic mapping for Omniture -> SnowPlow custom variables (needs to be client specific). It may make sense to map `propx` -> `cv_page` (because `prop` values change within a session) and map `evars` -> `cv_user` OR `cv_session` |
+| `purchaseid`  | Unique identifier for purchase | Yes     | Direct mapping: `tr_orderid` **and** `ti_orderid` |
 | `referrer`    | Page prior to the current page | Yes     | Direct mapping: `page_referrer` |
 | `state`       | Geographical region (e.g. Arizona) passed in on Javascript. Normally only set on purchase page. | Yes | Direct mapping: `tr_state` |
 | `user_agent`  | User agent from HTTP header    | In progress | Range of Browser, Operating System and Device related fields we can set with this - need to decide which we use. |
 | `zip`         | Zip code passed in on javascript. Usually only set on purchase page | No | Not useful? |
 | `search_engine` | Search engine ID             | In progress | Want to use this as one input to set `mkt_source`, `mkt_medium`. Need to develop the function to do this. Also need to work out how to query the lookup table. |
 | `exclude_hit` | Hit excluded by client rule    | In progress | Need to incorporate logic that ignores any row where this is set |
-| `hier1` -> `hier5` | Delimited list of values passed in on an image request | No | Not clear if there is a generic mapping for Omniture -> SnowPlow custom variables (needs to be client specific) |
+| `hier1` -> `hier5` | Delimited list of values. Looks like this is generally used to locate a web page hierarchy from the URL path | No | Not clear if there is a generic mapping for Omniture -> SnowPlow custom variables (needs to be client specific) |
 | `browser`     | Browser ID (has lookup table)  | In progress | Need to work out how to get contents of browser lookup table. (And whether this is constant across Omniture instances.) If so, browser fields can be derived from this dirctly, rather than the `user_agent` field |
 | `post_browser_height` | Height in pixels of browser window | Yes | Direct mapping: `dvce_screenheight` |
 | `post_browser_width`  | Width in pixels of browser window  | Yes | Direct mapping: `dvce_screenwidth`  |
@@ -69,7 +70,7 @@ The below table lists all of the fields in the Omniture log files, and indicates
 | `connection_type` | Connection type ID (has lookup table) | Yes | Direct mapping: `connection_type`. Need to work out how to lookup associated table |
 | `country`    | Country ID (has lookup table)              | No  | We use `geo_country` field instead |
 | `domain`     | Domain of users ISP                        | Yes | Direct mapping: `domain` |
-| `post_t_time_info | Raw time info from javascript         | No  | Use `date_time` instead  |
+| `post_t_time_info`| Raw time info from javascript         | No  | Use `date_time` instead  |
 | `javascript` | Javascript version                         | Yes | Direct mapping: `br_jsversion` |
 | `language`   | Language ID (has lookup table)             | No  | Currently us `accept_language`  instead. Is that the best approach? |
 | `os`         | Operating System ID (has lookup table)     | In progress | Either need to use lookup table to populate OS fields, or deduce from `user_agent` |
@@ -98,7 +99,7 @@ The below table lists all of the fields in the Omniture log files, and indicates
 | `monthly_visitor`   | Flag to determine if current hit is a new monthly visitor| No | Redundant data (no additional information provided) |
 | `yearly_visitor`    | Flag to determine if current hit is a new yearly visitor | No | Redundant data (no additional information provided) |
 | `post_campaign`     | Campaign                            | Yes | Direct mapping: `mkt_campaign` |
-| `evar1` -> `evar50` | Custom commerce variables           | No  | Not clear if there is a generic mapping for Omniture -> SnowPlow custom variables (needs to be client specific) |
+| `evar1` -> `evar50` | Custom commerce variables           | No  | Not clear if there is a generic mapping for Omniture -> SnowPlow custom variables (needs to be client specific). It may make sense to map `propx` -> `cv_page` (because `prop` values change within a session) and map `evars` -> `cv_user` OR `cv_session`|
 | `post_evar1` -> `post_evar50` | Custom commerce variables | No  | Not clear if there is a generic mapping for Omniture -> SnowPlow custom variables (needs to be client specific) |
 | `click_action`      | Click map info: this is what is contained in the address the link the user clicked on (URL / JS function) | Yes | Direct mapping: `click_targeturl` |
 | `click_action_type` | Click map info: type of link clicked on | In progress | Need to create a functional mapping between Omniture `click_action_type` and SnowPlow `click_targettype` |
