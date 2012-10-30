@@ -12,7 +12,7 @@
 -- Version:     0.0.1
 -- URL:         s3://snowplow-emr-assets/hive/hiveql/hive-exact-etl-0.4.10.q
 --
--- Authors:     Alex Dean, Yali Sassoon, Simon Andersson, Michael Tibben
+-- Authors:     Alex Dean, Yali Sassoon
 -- Copyright:   Copyright (c) 2012 SnowPlow Analytics Ltd
 -- License:     Apache License Version 2.0
 
@@ -256,7 +256,7 @@ ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
 STORED AS 
 INPUTFORMAT 'com.tgam.hadoop.mapred.OmnitureDataFileInputFormat' 
 OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.IgnoreKeyTextOutputFormat'
-LOCATION 's3://omniture-connector/data/sample/';
+LOCATION '${OMNITURE_LOGS_LOCATION}';
 
 -- 3. Define the table where your SnowPlow data lives. This will be where the Omniture data is ingested into
 
@@ -376,7 +376,7 @@ cv_context10 STRING,
 cv_json STRING
 )
 PARTITIONED BY (dt STRING)
-LOCATION 's3://omniture-connector/data/output/' ;
+LOCATION '${SNOWPLOW_DATA_LOCATION}' ;
 
 
 
