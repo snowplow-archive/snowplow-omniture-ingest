@@ -450,8 +450,9 @@ NULL AS os_manufacturer,
 --dvce fields. TODO: set dvce_type and dvce_ismobile from user_agent string
 NULL AS dvce_type,
 NULL AS dvce_ismobile,
-post_browser_width AS dvce_screenwidth,
-post_browser_height AS dvce_screenheight,
+-- TODO: assign the dvce screen width and height based on `resolution` lookup table
+NULL AS dvce_screenwidth,
+NULL AS dvce_screenheight,
 
 -- TODO: check how SiteCatalyst sets mobile_id. (This isn't provided in the sample data set)
 NULL AS app_id, 

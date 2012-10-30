@@ -31,7 +31,7 @@ The below table lists all of the fields in the Omniture log files, and indicates
 |:---------------|:------------------|:---------------------|:----------------------------------------------------|
 | `hit_time_gmt` | Event time        | Will not be included | We use `date_time` field instead                    |
 | `service`      | pe (page event) or ss  | Will not be included | Deprecated field                               |
-| `accept_language`| Accept language header from browser | Will not be included | Not useful?                        |
+| `accept_language`| Accept language header from browser | Yes | Direct mapping: `br_lang`                        |
 | `date_time`      | Time (recorded by Omniture servers) | Yes | Mapped to `dt` and `tm`                            |
 | `visid_high`   | 1st part of user_id | Yes             | Mapped to `user_id`: `user_id` = CONCAT(`visid_high`, `visid_low`) |
 | `visid_low`    | 2nd part of user_id | Yes             | Mapped to `user_id`: `user_id` = CONCAT(`visid_high`, `visid_low`) |
@@ -54,13 +54,52 @@ The below table lists all of the fields in the Omniture log files, and indicates
 | `zip`         | Zip code passed in on javascript. Usually only set on purchase page | No | Not useful? |
 | `search_engine` | Search engine ID             | In progress | Want to use this as one input to set `mkt_source`, `mkt_medium`. Need to develop the function to do this. Also need to work out how to query the lookup table. |
 | `exclude_hit` | Hit excluded by client rule    | In progress | Need to incorporate logic that ignores any row where this is set |
-| `hier1` -> `hier5` | Delimited list of values passed in on an image request | No | ot clear if there is a generic mapping for Omniture -> SnowPlow custom variables (needs to be client specific) |
+| `hier1` -> `hier5` | Delimited list of values passed in on an image request | No | Not clear if there is a generic mapping for Omniture -> SnowPlow custom variables (needs to be client specific) |
 | `browser`     | Browser ID (has lookup table)  | In progress | Need to work out how to get contents of browser lookup table. (And whether this is constant across Omniture instances.) If so, browser fields can be derived from this dirctly, rather than the `user_agent` field |
 | `post_browser_height` | Height in pixels of browser window | Yes | Direct mapping: `dvce_screenheight` |
 | `post_browser_width`  | Width in pixels of browser window  | Yes | Direct mapping: `dvce_screenwidth`  |
 | `post_cookies` | Flag to indicate whether a Javascript session cookie is accepted | Yes | Direct mapping: `br_cookies` |
+| `post_java_enabled` | Flag indicated whether or not Java is enabled | Yes | Funcional mapping: `br_features`. |
+| `post_persistent_cookie | Flag indicating if 3rd party cookies and / or persistent cookies are enabled | In progress | Need to add a new field for this in SnowPlow? |
+| `connection_type` | Connection type ID (has lookup table) | Yes | Direct mapping: `connection_type`. Need to work out how to lookup associated table |
+| `country`    | Country ID (has lookup table)              | No  | We use `geo_country` field instead |
+| `domain`     | Domain of users ISP                        | Yes | Direct mapping: `domain` |
+| `post_t_time_info | Raw time info from javascript         | No  | Use `date_time` instead  |
+| `javascript` | Javascript version                         | Yes | Direct mapping: `br_jsversion` |
+| `language`   | Language ID (has lookup table)             | No  | Currently us `accept_language`  instead. Is that the best approach? |
+| `os`         | Operating System ID (has lookup table)     | In progress | Either need to use lookup table to populate OS fields, or deduce from `user_agent` |
+| `plugins`    | List of plugin IDs available to browser (has lookup table) | In progress | Need to use lookup table and map onto `br_features` |
+| `resolution` | Resolution ID (has lookup table)           | In progress | Functional mapping: `dvce_screenwidth` and `dvce_screenheight` |
+| `last_hit_time_gmt` | Time of the previous record         | No | Redundant data (no additional information provided) |
+| `first_hit_time_gmt`| Time of first hit in GMT            | No | Redundant data (no additional information provided) |
+| `visit_start_time_gmt`| The gmt timestamp of the first pageview in this visit | No | Redundant data (no additional information provided) |
+| `last_purchase_time_gmt` | The time of previous purchase record | No | Redundant data (no additional information provided) |
+| `last_purchase_num` | The purchase number of the previous record | No| Redundant data (no additional information provided) | 
+| `first_hit_page_url`| The original entry page URL         | No   | Redundant data (no additional information provided) |
+| `first_hit_pagename`| Original entry page title           | No   | Redundant data (no additional information provided) |
+| `first_hit_referrer`| Original referrer - referre of the first hit ever for the visit | No | Redundant data (no additional information provided) |
+| `visit_referrer`    | Referrer for this visit             | Yes | Direct mapping: `mkt_referrerurl` |
+| `visit_search_engine`| The search engine used to find the site | No | Ignored: use `search_engine_id` instead |
+| `visit_num`         | The number of the current visit     | Yes | Direct mapping: `visit_id` |
+| `visit_page_num`    | The page sequence number in the current visit | No | Redundant data (no additional information provided) | 
+| `prev_page`         | The page id of the previous page - internal ID not used by the customer | No | Ignore |
+| `geo_city`          | City from Digital Envoy             | Yes | Direct mapping: `geo_city` |
+| `geo_country`       | Country from Digital Envoy          | Yes | Direct mapping: `geo_country` |
+| `geo_region`        | Region / State from Digital Envoy   | Yes | Direct mapping: `geo_region` |
+| `duplicate_purchase'| A flag indicating that the purchase event for this hit should be ignored because it's a duplicate | In progress | Need to build in logic to ignore rows where this flag is set to `TRUE` |
+| `new_visit`         | A flag that determines if the current hit is a new visit | No | Redundant data (no additional information provided) |
+| `daily_visitor`     | Flag to determine if current hit is a new daily visitor  | No | Redundant data (no additional information provided) |
+| `hourly_visitor`    | Flag to determine if current hit is a new hourly visitor | No | Redundant data (no additional information provided) |
+| `monthly_visitor`   | Flag to determine if current hit is a new monthly visitor| No | Redundant data (no additional information provided) |
+| `yearly_visitor`    | Flag to determine if current hit is a new yearly visitor | No | Redundant data (no additional information provided) |
+| `post_campaign`     | Campaign                            | Yes | Direct mapping: `mkt_campaign` |
+| `evar1` -> `evar50` | Custom commerce variables           | No  | Not clear if there is a generic mapping for Omniture -> SnowPlow custom variables (needs to be client specific) |
+| `post_evar1` -> `post_evar50` | Custom commerce variables | No  | Not clear if there is a generic mapping for Omniture -> SnowPlow custom variables (needs to be client specific) |
+| `click_action`      | Click map info: this is what is contained in the address the link the user clicked on (URL / JS function) | Yes | Direct mapping: `click_targeturl` |
+| `click_action_type` | Click map info: type of link clicked on | 
+| `click_context`     |
+| `click_sourceid`    | 
+| `click_tag`         |
 
 
 
-
-TO WRITE
