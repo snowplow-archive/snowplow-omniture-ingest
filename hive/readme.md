@@ -100,7 +100,7 @@ The below table lists all of the fields in the Omniture log files, and indicates
 | `click_context`     | Click map info: title or URL of page where link was clicked | No |
 | `click_context_type`| Click map info: type of click_context (whether a page title or URL was used) | No | 
 | `click_sourceid`    | Click map info: numeric ID of the location of the page where the link was clicked | In progress | Need to create a functional mapping between Omniture `click_sourceid` and SnowPlow `click_sourceid` |
-| `click_tag`         | Click map info: type of link / form element that was clicked on | 
+| `click_tag`         | Click map info: type of link / form element that was clicked on | No | 
 
 
 
