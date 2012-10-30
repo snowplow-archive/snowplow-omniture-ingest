@@ -60,7 +60,7 @@ The below table lists all of the fields in the Omniture log files, and indicates
 | `post_browser_width`  | Width in pixels of browser window  | Yes | Direct mapping: `dvce_screenwidth`  |
 | `post_cookies` | Flag to indicate whether a Javascript session cookie is accepted | Yes | Direct mapping: `br_cookies` |
 | `post_java_enabled` | Flag indicated whether or not Java is enabled | Yes | Funcional mapping: `br_features`. |
-| `post_persistent_cookie | Flag indicating if 3rd party cookies and / or persistent cookies are enabled | In progress | Need to add a new field for this in SnowPlow? |
+| `post_persistent_cookie`| Flag indicating if 3rd party cookies and / or persistent cookies are enabled | In progress | Need to add a new field for this in SnowPlow? |
 | `connection_type` | Connection type ID (has lookup table) | Yes | Direct mapping: `connection_type`. Need to work out how to lookup associated table |
 | `country`    | Country ID (has lookup table)              | No  | We use `geo_country` field instead |
 | `domain`     | Domain of users ISP                        | Yes | Direct mapping: `domain` |
@@ -86,7 +86,7 @@ The below table lists all of the fields in the Omniture log files, and indicates
 | `geo_city`          | City from Digital Envoy             | Yes | Direct mapping: `geo_city` |
 | `geo_country`       | Country from Digital Envoy          | Yes | Direct mapping: `geo_country` |
 | `geo_region`        | Region / State from Digital Envoy   | Yes | Direct mapping: `geo_region` |
-| `duplicate_purchase'| A flag indicating that the purchase event for this hit should be ignored because it's a duplicate | In progress | Need to build in logic to ignore rows where this flag is set to `TRUE` |
+| `duplicate_purchase`| A flag indicating that the purchase event for this hit should be ignored because it's a duplicate | In progress | Need to build in logic to ignore rows where this flag is set to `TRUE` |
 | `new_visit`         | A flag that determines if the current hit is a new visit | No | Redundant data (no additional information provided) |
 | `daily_visitor`     | Flag to determine if current hit is a new daily visitor  | No | Redundant data (no additional information provided) |
 | `hourly_visitor`    | Flag to determine if current hit is a new hourly visitor | No | Redundant data (no additional information provided) |
