@@ -40,8 +40,8 @@ The below table lists all of the fields in the Omniture log files, and indicates
 | `service`      | pe (page event) or ss  | Will not be included | Deprecated field                               |
 | `accept_language`| Accept language header from browser | Yes | Direct mapping: `br_lang`                        |
 | `date_time`      | Time (recorded by Omniture servers) | Yes | Mapped to `dt` and `tm`                            |
-| `visid_high`   | 1st part of user_id | Yes             | Mapped to `user_id`: `user_id = CONCAT(visid_high, visid_low)` |
-| `visid_low`    | 2nd part of user_id | Yes             | Mapped to `user_id`: `user_id = CONCAT(visid_high, visid_low)` |
+| `visid_high`   | 1st part of user_id | Yes             | Mapped to `user_id`: `user_id = CONCAT(visid_high, '-', visid_low)` |
+| `visid_low`    | 2nd part of user_id | Yes             | Mapped to `user_id`: `user_id = CONCAT(visid_high, '-', visid_low)` |
 | `event_list`   | Comma separated list of numeric IDs, representing events passed in from the customer | Potential todo | Need to work out when / how this is used i.e. where are the numeric IDs specified looked up? |
 | `homepage`     | Homepage flag     | Will not be included | Redundant (easy to deduce if homepage view from `page_url`) |
 | `ip`           | IP Address        | Yes                  | Direct mapping: `ip_address`                        |
