@@ -1,6 +1,25 @@
--- 1. Add the JAR from https://github.com/snowplow/omniture-data-file-input-format, to enable parsing of data from Omniture clickstream logs. (Note: update the location to reflect the location of the JAR file.)
+-- Copyright (c) 2012 SnowPlow Analytics Ltd. All rights reserved.
+--
+-- This program is licensed to you under the Apache License Version 2.0,
+-- and you may not use this file except in compliance with the Apache License Version 2.0.
+-- You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
+--
+-- Unless required by applicable law or agreed to in writing,
+-- software distributed under the Apache License Version 2.0 is distributed on an
+-- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
+--
+-- Version:     0.0.1
+-- URL:         s3://snowplow-emr-assets/hive/hiveql/hive-exact-etl-0.4.10.q
+--
+-- Authors:     Alex Dean, Yali Sassoon, Simon Andersson, Michael Tibben
+-- Copyright:   Copyright (c) 2012 SnowPlow Analytics Ltd
+-- License:     Apache License Version 2.0
 
-ADD JAR s3://omniture-connector/static/omniture-data-file-input-format-0.0.1.jar ;
+
+-- 1. Add the JAR from https://github.com/snowplow/omniture-data-file-input-format, to enable parsing of data from Omniture clickstream logs. (Note: the location of the JAR points to a publically-available version hosted by SnowPlow on S3 (EU region).)
+
+ADD JAR s3://snowplow-emr-assets/hadoop/omniture-ingest/omniture-data-file-input-format-0.0.1.jar ;
 
 -- 2. Create a table to represent the data to be imported from Omniture. (Update the path to reflect where your Omniture log files have been uploaded to in S3)
 
